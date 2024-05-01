@@ -8,11 +8,13 @@ namespace Labyrynth
 {
     public class Labirint
     {
-        public bool HasExit(int startI, int startJ, int[,] lab)
+        public int countOfExit = 0;
+
+        public int HasExit(int startI, int startJ, int[,] lab)
         {
-            if (lab[startI, startJ] == 1) return false;
+            if (lab[startI, startJ] == 1) return 0;
 
-
+            countOfExit = 0;
 
             var i = startI;
             var j = startJ;
@@ -22,13 +24,16 @@ namespace Labyrynth
 
             while (stack.Count > 0)
             {
+
                 var temp = stack.Pop();
 
-                if (lab[temp.Item1, temp.Item2] == 2) return true;
+                if (lab[temp.Item1, temp.Item2] == 2) { countOfExit++;}
+
+                
 
                 lab[temp.Item1, temp.Item2] = 1;
 
-                if (temp.Item2 >= 0 && lab[temp.Item1, temp.Item2 - 1] != 1)
+                if (temp.Item2 > 0 && lab[temp.Item1, temp.Item2 - 1] != 1)
                 {
                     stack.Push(new (temp.Item1, temp.Item2 - 1)); // up
                 }
@@ -36,18 +41,19 @@ namespace Labyrynth
                 {
                     stack.Push(new(temp.Item1, temp.Item2 + 1)); // down
                 }
-                if (temp.Item1 >= 0 && lab[temp.Item1-1, temp.Item2] != 1)
+                if (temp.Item1 > 0 && lab[temp.Item1-1, temp.Item2] != 1)
                 {
-                    stack.Push(new(temp.Item1-1, temp.Item2)); // left
+                    stack.Push(new(temp.Item1 - 1, temp.Item2)); // left
                 }
                 if (temp.Item1 + 1 < lab.GetLength(0) && lab[temp.Item1 + 1, temp.Item2] != 1)
                 {
-                    stack.Push(new(temp.Item1 + 1, temp.Item2)); // left
+                    stack.Push(new(temp.Item1 + 1, temp.Item2)); // right
                 }
 
             }
 
-            return false;
+            return countOfExit;
+            
 
         }
     }
